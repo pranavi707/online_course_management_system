@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="subpage-header">
+        <div>
+            <p class="eyebrow">Administrator Workspace</p>
+            <h1>Academic Operations Dashboard</h1>
+        </div>
+        <a class="button secondary" href="/">Back to Home</a>
+    </section>
+
+    <p class="flash-message" th:if="${message}" th:text="${message}">Saved.</p>
+
+    <section class="stats">
+        <article class="stat-card">
+            <span>Total Courses</span>
+            <strong th:text="${adminData.totalCourseCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Active Courses</span>
+            <strong th:text="${adminData.summary().activeCourseCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Total Enrollments</span>
+            <strong th:text="${adminData.summary().enrollmentCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Completed Enrollments</span>
+            <strong th:text="${adminData.completedEnrollmentCount()}">0</strong>
+        </article>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Create Course</h2>
+                <p>Add new offerings into the system.</p>
+            </div>
+            <form class="admin-form" th:action="@{/admin/courses}" method="post" th:object="${courseForm}">
+                <label>Course Code<input type="text" th:field="*{code}" required></label>
+                <label>Title<input type="text" th:field="*{title}" required></label>
+                <label>Category<input type="text" th:field="*{category}" required></label>
+                <label>Instructor
+                    <select th:field="*{instructorId}" required>
+                        <option value="">Select instructor</option>
+                        <option th:each="instructor : ${adminData.instructors()}" th:value="${instructor.id}" th:text="${instructor.fullName}"></option>
+                    </select>
+                </label>
+                <label>Start Date<input type="date" th:field="*{startDate}" required></label>
+                <label>End Date<input type="date" th:field="*{endDate}" required></label>
+                <label>Description<textarea th:field="*{description}" rows="4" required></textarea></label>
+                <button class="button primary" type="submit">Create Course</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Publish Announcement</h2>
+                <p>Share important platform updates.</p>
+            </div>
+            <form class="admin-form" th:action="@{/admin/announcements}" method="post" th:object="${announcementForm}">
+                <label>Course
+                    <select th:field="*{courseId}" required>
+                        <option value="">Select course</option>
+                        <option th:each="course : ${adminData.courses()}" th:value="${course.id}" th:text="${course.code + ' - ' + course.title}"></option>
+                    </select>
+                </label>
+                <label>Title<input type="text" th:field="*{title}" required></label>
+                <label>Message<textarea th:field="*{message}" rows="5" required></textarea></label>
+                <button class="button primary" type="submit">Publish</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Enroll Student</h2>
+                <p>Register learners into active or planned courses.</p>
+            </div>
+            <form class="admin-form" th:action="@{/admin/enrollments}" method="post" th:object="${enrollmentForm}">
+                <label>Student
+                    <select th:field="*{studentId}" required>
+                        <option value="">Select student</option>
+                        <option th:each="student : ${adminData.students()}" th:value="${student.id}" th:text="${student.fullName}"></option>
+                    </select>
+                </label>
+                <label>Course
+                    <select th:field="*{courseId}" required>
+                        <option value="">Select course</option>
+                        <option th:each="course : ${adminData.courses()}" th:value="${course.id}" th:text="${course.code + ' - ' + course.title}"></option>
+                    </select>
+                </label>
+                <button class="button primary" type="submit">Enroll Student</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Recent Announcements</h2>
+                <p>Latest published updates.</p>
+            </div>
+            <div class="announcement-list">
+                <article class="announcement" th:each="announcement : ${adminData.announcements()}">
+                    <span th:text="${announcement.postedOn}">2026-03-18</span>
+                    <h3 th:text="${announcement.title}">Title</h3>
+                    <p th:text="${announcement.message}">Message</p>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Course Management System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Institutional E-Learning Platform</p>
+            <h1>Online Course Management System</h1>
+            <p class="lede">
+                A centralized academic workspace for administrators, instructors, and students to manage courses,
+                track learning progress, and streamline digital teaching operations.
+            </p>
+            <div class="hero-links">
+                <a class="button primary" href="#courses">Browse Courses</a>
+                <a class="button secondary" href="/student/4">Student View</a>
+                <a class="button secondary" href="/instructor/2">Instructor View</a>
+                <a class="button secondary" href="/admin">Admin View</a>
+            </div>
+        </div>
+        <div class="hero-panel">
+            <h2>Abstract-Aligned Goals</h2>
+            <ul>
+                <li>Digitize course administration and content delivery.</li>
+                <li>Support role-based academic workflows.</li>
+                <li>Improve communication, enrollment tracking, and learner progress visibility.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="stats">
+        <article class="stat-card">
+            <span>Total Instructors</span>
+            <strong th:text="${summary.instructorCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Total Students</span>
+            <strong th:text="${summary.studentCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Active Courses</span>
+            <strong th:text="${summary.activeCourseCount()}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Enrollments</span>
+            <strong th:text="${summary.enrollmentCount()}">0</strong>
+        </article>
+    </section>
+
+    <section class="content-grid" id="courses">
+        <div class="panel wide">
+            <div class="panel-header">
+                <h2>Course Catalog</h2>
+                <p>Live and upcoming courses managed through the system.</p>
+            </div>
+            <div class="course-grid">
+                <article class="course-card" th:each="course : ${courses}">
+                    <div class="course-top">
+                        <span class="pill" th:text="${course.code}">CS101</span>
+                        <span class="status" th:text="${course.status}">ACTIVE</span>
+                    </div>
+                    <h3 th:text="${course.title}">Course Title</h3>
+                    <p th:text="${course.description}">Description</p>
+                    <dl>
+                        <div>
+                            <dt>Instructor</dt>
+                            <dd th:text="${course.instructor.fullName}">Instructor</dd>
+                        </div>
+                        <div>
+                            <dt>Category</dt>
+                            <dd th:text="${course.category}">Category</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd th:text="${course.startDate + ' to ' + course.endDate}">Dates</dd>
+                        </div>
+                        <div>
+                            <dt>Modules</dt>
+                            <dd th:text="${#lists.size(course.modules)}">0</dd>
+                        </div>
+                    </dl>
+                    <a class="text-link" th:href="@{/courses/{id}(id=${course.id})}">Open course details</a>
+                </article>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Recent Announcements</h2>
+                <p>Platform-wide academic updates.</p>
+            </div>
+            <div class="announcement-list">
+                <article class="announcement" th:each="announcement : ${announcements}">
+                    <span th:text="${announcement.postedOn}">2026-03-18</span>
+                    <h3 th:text="${announcement.title}">Title</h3>
+                    <p th:text="${announcement.message}">Message</p>
+                    <small th:text="${announcement.course.title}">Course</small>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Faculty</h2>
+                <p>Course owners and facilitators.</p>
+            </div>
+            <div class="person-list">
+                <article th:each="instructor : ${instructors}" class="person-card">
+                    <h3 th:text="${instructor.fullName}">Name</h3>
+                    <p th:text="${instructor.department}">Department</p>
+                    <span th:text="${instructor.email}">Email</span>
+                </article>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Student Access</h2>
+                <p>Sample learners seeded for review.</p>
+            </div>
+            <div class="person-list">
+                <article th:each="student : ${students}" class="person-card">
+                    <h3 th:text="${student.fullName}">Name</h3>
+                    <p th:text="${student.department}">Department</p>
+                    <a th:href="@{/student/{id}(id=${student.id})}">Open Dashboard</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Frontend</h2>
+                <p>Browser pages available in the project.</p>
+            </div>
+            <div class="person-list">
+                <article class="person-card">
+                    <h3>Home Dashboard</h3>
+                    <a href="/">Open `/`</a>
+                </article>
+                <article class="person-card">
+                    <h3>Admin Dashboard</h3>
+                    <a href="/admin">Open `/admin`</a>
+                </article>
+                <article class="person-card">
+                    <h3>Student Dashboard</h3>
+                    <a href="/student/4">Open `/student/4`</a>
+                </article>
+                <article class="person-card">
+                    <h3>Instructor Dashboard</h3>
+                    <a href="/instructor/2">Open `/instructor/2`</a>
+                </article>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Backend API</h2>
+                <p>JSON endpoints for integration or testing.</p>
+            </div>
+            <div class="person-list">
+                <article class="person-card">
+                    <h3>Overview API</h3>
+                    <a href="/api/overview">Open `/api/overview`</a>
+                </article>
+                <article class="person-card">
+                    <h3>Courses API</h3>
+                    <a href="/api/courses">Open `/api/courses`</a>
+                </article>
+                <article class="person-card">
+                    <h3>Admin API</h3>
+                    <a href="/api/admin">Open `/api/admin`</a>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="subpage-header">
+        <div>
+            <p class="eyebrow">Student Workspace</p>
+            <h1>Learning Progress Dashboard</h1>
+        </div>
+        <a class="button secondary" href="/">Back to Home</a>
+    </section>
+
+    <section class="content-grid single-column">
+        <div class="panel wide">
+            <div class="panel-header">
+                <h2>My Enrollments</h2>
+                <p>Track status, progress, and scheduled learning activities.</p>
+            </div>
+            <div class="enrollment-list">
+                <article class="enrollment-card" th:each="enrollment : ${enrollments}">
+                    <div class="course-top">
+                        <span class="pill" th:text="${enrollment.course.code}">CS301</span>
+                        <span class="status" th:text="${enrollment.status}">IN_PROGRESS</span>
+                    </div>
+                    <h3 th:text="${enrollment.course.title}">Course Title</h3>
+                    <p th:text="${enrollment.course.description}">Description</p>
+                    <div class="progress-bar">
+                        <span th:style="'width:' + ${enrollment.progressPercent} + '%'"></span>
+                    </div>
+                    <strong th:text="${enrollment.progressPercent + '% complete'}">0% complete</strong>
+                </article>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Latest Notices</h2>
+                <p>Recent alerts related to ongoing courses.</p>
+            </div>
+            <div class="announcement-list">
+                <article class="announcement" th:each="announcement : ${announcements}">
+                    <span th:text="${announcement.postedOn}">2026-03-18</span>
+                    <h3 th:text="${announcement.title}">Title</h3>
+                    <p th:text="${announcement.message}">Message</p>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Detail</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="subpage-header">
+        <div>
+            <p class="eyebrow" th:text="${course.code}">CS301</p>
+            <h1 th:text="${course.title}">Course Title</h1>
+            <p class="lede" th:text="${course.description}">Course description</p>
+        </div>
+        <a class="button secondary" href="/">Back to Home</a>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Course Overview</h2>
+                <p>Detailed academic information.</p>
+            </div>
+            <dl>
+                <div>
+                    <dt>Instructor</dt>
+                    <dd th:text="${course.instructor.fullName}">Instructor</dd>
+                </div>
+                <div>
+                    <dt>Category</dt>
+                    <dd th:text="${course.category}">Category</dd>
+                </div>
+                <div>
+                    <dt>Status</dt>
+                    <dd th:text="${course.status}">ACTIVE</dd>
+                </div>
+                <div>
+                    <dt>Timeline</dt>
+                    <dd th:text="${course.startDate + ' to ' + course.endDate}">Dates</dd>
+                </div>
+            </dl>
+            <div class="module-list">
+                <article class="module-item" th:each="module : ${course.modules}">
+                    <strong th:text="${'Week ' + module.weekNumber + ': ' + module.title}">Week 1</strong>
+                    <p th:text="${module.summary}">Summary</p>
+                </article>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Enrolled Students</h2>
+                <p>Participation registered in the system.</p>
+            </div>
+            <div class="person-list">
+                <article class="person-card" th:each="enrollment : ${enrollments}">
+                    <h3 th:text="${enrollment.student.fullName}">Student</h3>
+                    <p th:text="${enrollment.student.department}">Department</p>
+                    <span th:text="${enrollment.status + ' • ' + enrollment.progressPercent + '%'}">Status</span>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

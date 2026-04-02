@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="subpage-header">
+        <div>
+            <p class="eyebrow">Instructor Workspace</p>
+            <h1>Course Delivery Dashboard</h1>
+        </div>
+        <a class="button secondary" href="/">Back to Home</a>
+    </section>
+
+    <section class="content-grid single-column">
+        <div class="panel wide">
+            <div class="panel-header">
+                <h2>Assigned Courses</h2>
+                <p>Manage teaching plans, timelines, and learning modules.</p>
+            </div>
+            <div class="course-grid">
+                <article class="course-card" th:each="course : ${courses}">
+                    <div class="course-top">
+                        <span class="pill" th:text="${course.code}">Code</span>
+                        <span class="status" th:text="${course.status}">Status</span>
+                    </div>
+                    <h3 th:text="${course.title}">Course</h3>
+                    <p th:text="${course.description}">Description</p>
+                    <div class="module-list">
+                        <article class="module-item" th:each="module : ${course.modules}">
+                            <strong th:text="${'Week ' + module.weekNumber + ': ' + module.title}">Week 1</strong>
+                            <p th:text="${module.summary}">Summary</p>
+                        </article>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
